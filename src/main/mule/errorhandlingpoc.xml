@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:validation="http://www.mulesoft.org/schema/mule/validation" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/validation http://www.mulesoft.org/schema/mule/validation/current/mule-validation.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="06f1d20b-93d9-4519-85f2-ff0eba85d87d" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="errorhandlingpocFlow" doc:id="c0277409-528c-4889-9032-ea04c730847c" >
+		<logger level="INFO" doc:name="Logger" doc:id="4bba020d-55aa-4ce8-9c9c-e8114fa1e196" />
+		<validation:is-null doc:id="b92f18b2-bab1-4dd7-92ff-6d570475e547" value="#[paload]"/>
+		<logger level="INFO" doc:name="Logger" doc:id="02ed5fa4-522e-4bb0-9a93-61a9093efed8" />
+		<error-handler >
+			<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="1487cbf9-2e15-4ebf-b4f6-b78ea40fa765" >
+				<logger level="INFO" doc:name="Logger" doc:id="eee7bb1e-808c-47d6-b09b-80e8ad86bf97" />
+				<logger level="INFO" doc:name="Logger" doc:id="9595e368-b3d4-43c3-af80-bfe34c4c12c9" />
+				<logger level="INFO" doc:name="Logger" doc:id="55a26eb0-b591-4ccf-97c3-aeafd6142c32" />
+			</on-error-propagate>
+		</error-handler>
+	</flow>
+	<flow name="Flow1" doc:id="ffa9d7e3-e37f-4122-93d0-7ef9b6991130" >
+		<http:listener doc:name="Listener" doc:id="ad0732e4-1eae-4300-8827-0291965be607" config-ref="HTTP_Listener_config" path="/test"/>
+		<logger level="INFO" doc:name="Logger" doc:id="d4b3e411-8992-4c74-b07f-f906e940d6b8" />
+		<flow-ref doc:name="Flow Reference" doc:id="bf6626ab-0b43-4746-9c43-410e1fc7e321" name="errorhandlingpocFlow"/>
+		<logger level="INFO" doc:name="Logger" doc:id="79647512-b718-4312-a9f6-3d4081aa0df3" />
+		<error-handler >
+			<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="da5a6d30-212b-4f01-b1fd-823a5545c6dc" >
+				<logger level="INFO" doc:name="Logger" doc:id="a28fec47-175e-4f19-b674-a2c20537c76f" />
+				<logger level="INFO" doc:name="Logger" doc:id="f1716068-68d1-4294-835e-9516b7352a63" />
+				<logger level="INFO" doc:name="Logger" doc:id="d378ec40-107f-4773-a137-1935013b97b3" />
+			</on-error-continue>
+		</error-handler>
+	</flow>
+</mule>
